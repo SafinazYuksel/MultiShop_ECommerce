@@ -18,6 +18,32 @@
     <link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
     <!-- Main Style Css -->
     <link rel="stylesheet" href="~/LoginRegister_Template/css/style.css" />
+
+    <style>
+        .text-danger {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+            font-weight: bold;
+        }
+
+        .input-validation-error {
+            border-bottom: 2px solid #ff0000 !important;
+        }
+
+        .validation-summary-errors ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .validation-summary-errors li {
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body class="form-v4">
     <div class="page-content">
@@ -33,14 +59,16 @@
             <form class="form-detail" method="post">
                 <h2>MultiShop Giriş Formu</h2>
                 <div class="form-row">
-                    <label for="your_username">Kullanıcı Adınız</label>
-                    <input type="text" id="your_username" asp-for="Username" class="input-text" required>
+                    <label asp-for="Username">Kullanıcı Adınız</label>
+                    <input type="text" asp-for="Username" class="input-text">
+                    <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
                 <div class="form-row">
-                    <label for="your_password">Şifreniz</label>
-                    <input type="password" id="your_password" asp-for="Password" class="input-text" required>
+                    <label asp-for="Password">Şifre</label>
+                    <input type="password" asp-for="Password" class="input-text">
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-
+                <div class="form-row text-danger" asp-validation-summary="ModelOnly"></div>
                 <div class="form-row-last">
                     <button class="register" style="height:35px">Giriş Yap</button>
                 </div>

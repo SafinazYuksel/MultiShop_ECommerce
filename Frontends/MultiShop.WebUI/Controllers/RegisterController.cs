@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.DtoLayer.IdentityDtos.RegisterDto;
+using MultiShop.WebUI.FluentValidation.IdentityServerValidator;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -23,7 +25,7 @@ namespace MultiShop.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(CreateRegisterDto createRegisterDto)
         {
-            if (createRegisterDto.Password == createRegisterDto.ConfirmPassword)
+            if (ModelState.IsValid)
             {
                 var client = _httpClientFactory.CreateClient();
                 var jsonData = JsonConvert.SerializeObject(createRegisterDto);

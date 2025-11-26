@@ -1,22 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
+using MultiShop.DtoLayer.IdentityDtos.LoginDto;
+using MultiShop.DtoLayer.IdentityDtos.RegisterDto;
+using MultiShop.WebUI.FluentValidation.IdentityServerValidator;
 using MultiShop.WebUI.Handlers;
 using MultiShop.WebUI.Services.Abstract;
+using MultiShop.WebUI.Services.BasketServices;
 using MultiShop.WebUI.Services.CargoServices.CargoCompanyServices;
 using MultiShop.WebUI.Services.CargoServices.CargoCustomerServices;
-using MultiShop.WebUI.Services.CommentServices;
-using MultiShop.WebUI.Services.Concrete;
-using MultiShop.WebUI.Services.MessageServices;
-using MultiShop.WebUI.Services.OrderServices.OrderingServices;
-using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
-using MultiShop.WebUI.Services.StatisticServices.CatalogStatisticServices;
-using MultiShop.WebUI.Services.StatisticServices.CommentStatisticServices;
-using MultiShop.WebUI.Services.StatisticServices.DiscountStatisticSerivces;
-using MultiShop.WebUI.Services.StatisticServices.MessageStatisticServices;
-using MultiShop.WebUI.Services.StatisticServices.UserStatisticServices;
-using MultiShop.WebUI.Services.UserIdentityServices;
-using MultiShop.WebUI.Services.BasketServices;
 using MultiShop.WebUI.Services.CatalogServices.AboutServices;
 using MultiShop.WebUI.Services.CatalogServices.BrandServices;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
@@ -28,8 +23,21 @@ using MultiShop.WebUI.Services.CatalogServices.ProductDetailServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductImageServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
 using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
+using MultiShop.WebUI.Services.CommentServices;
+using MultiShop.WebUI.Services.Concrete;
 using MultiShop.WebUI.Services.DiscountServices;
+using MultiShop.WebUI.Services.ImagesServices;
+using MultiShop.WebUI.Services.MessageServices;
+using MultiShop.WebUI.Services.OrderServices.OrderingServices;
+using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
+using MultiShop.WebUI.Services.StatisticServices.CatalogStatisticServices;
+using MultiShop.WebUI.Services.StatisticServices.CommentStatisticServices;
+using MultiShop.WebUI.Services.StatisticServices.DiscountStatisticServices;
+using MultiShop.WebUI.Services.StatisticServices.MessageStatisticServices;
+using MultiShop.WebUI.Services.StatisticServices.UserStatisticServices;
+using MultiShop.WebUI.Services.UserIdentityServices;
 using MultiShop.WebUI.Settings;
+using System.ComponentModel.DataAnnotations;
 
 namespace MultiShop.WebUI.Extensions
 {
@@ -37,7 +45,6 @@ namespace MultiShop.WebUI.Extensions
     {
         public static IServiceCollection AddWebUIServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // Add services to the container.
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddCookie(JwtBearerDefaults.AuthenticationScheme, opt =>
             {
                 opt.LoginPath = "/Login/Index/";
@@ -59,22 +66,33 @@ namespace MultiShop.WebUI.Extensions
 
             services.AddScoped<ResourceOwnerPasswordTokenHandler>();
             services.AddScoped<ClientCredentialTokenHandler>();
-            
+
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IClientCredentialTokenService, ClientCredentialTokenService>();
             services.AddScoped<IClientAccessTokenCache, InMemoryClientAccessTokenCache>();
             services.AddHttpClient<IIdentityService, IdentityService>();
             services.AddHttpClient<ClientCredentialTokenService>();
-            
+
             services.AddMemoryCache();
             services.AddHttpClient();
             services.AddHttpContextAccessor();
-            services.AddControllersWithViews();
-            
+
+            services.AddControllersWithViews()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
+
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<Program>();
+
+            services.AddScoped<IValidator<CreateLoginDto>, LoginValidator>();
+            services.AddScoped<IValidator<CreateRegisterDto>, RegisterValidator>();
+
             services.Configure<ClientSettings>(configuration.GetSection("ClientSettings"));
             services.Configure<ServiceApiSettings>(configuration.GetSection("ServiceApiSettings"));
 
             var values = configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
+
             services.AddHttpClient<IUserService, UserService>(opt =>
             {
                 opt.BaseAddress = new Uri(values.IdentityServerUrl);
@@ -131,16 +149,6 @@ namespace MultiShop.WebUI.Extensions
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
             services.AddScoped<IOrderingService, OrderingService>();
-
-            //services.AddHttpClient<IOrderAddressService, OrderAddressService>(opt =>
-            //{
-            //    opt.BaseAddress = new Uri($"{values.OcelotUrl}/{values.Order.Path}");
-            //}).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
-
-            //services.AddHttpClient<IOrderingService, OrderingService>(opt =>
-            //{
-            //    opt.BaseAddress = new Uri($"{values.OcelotUrl}/{values.Order.Path}");
-            //}).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
             services.AddHttpClient<IMessageService, MessageService>(opt =>
             {
@@ -211,8 +219,6 @@ namespace MultiShop.WebUI.Extensions
             {
                 opt.ResourcesPath = "Resources";
             });
-
-            services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 
             return services;
         }

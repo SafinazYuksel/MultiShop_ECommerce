@@ -75,7 +75,7 @@ namespace MultiShop.WebUI.Services.Concrete
             return true;
         }
 
-        public async Task<bool> SignIn(SignInDto signInDto)
+        public async Task<bool> SignIn(CreateLoginDto createLoginDto)
         {
             var discoveryEndPoint = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
@@ -86,16 +86,24 @@ namespace MultiShop.WebUI.Services.Concrete
                 }
             });
 
+            if (discoveryEndPoint.IsError) return false;
+
             var passwordTokenRequest = new PasswordTokenRequest
             {
                 ClientId = _clientSettings.MultiShopManagerClient.ClientId,
                 ClientSecret = _clientSettings.MultiShopManagerClient.ClientSecret,
-                UserName = signInDto.Username,
-                Password = signInDto.Password,
+                UserName = createLoginDto.Username,
+                Password = createLoginDto.Password,
                 Address = discoveryEndPoint.TokenEndpoint
             };
 
             var token = await _httpClient.RequestPasswordTokenAsync(passwordTokenRequest);
+
+            if (token.IsError)
+            {
+                return false;
+            }
+
             var userInfoRequest = new UserInfoRequest
             {
                 Token = token.AccessToken,
@@ -121,7 +129,7 @@ namespace MultiShop.WebUI.Services.Concrete
                 },
                 new AuthenticationToken
                 {
-                    Name =OpenIdConnectParameterNames.ExpiresIn,
+                    Name = OpenIdConnectParameterNames.ExpiresIn,
                     Value = DateTime.Now.AddSeconds(token.ExpiresIn).ToString()
                 }
             });

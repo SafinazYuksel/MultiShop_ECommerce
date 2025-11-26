@@ -1,5 +1,5 @@
 ﻿
-namespace MultiShop.WebUI.Services.StatisticServices.DiscountStatisticSerivces
+namespace MultiShop.WebUI.Services.StatisticServices.DiscountStatisticServices
 {
     public class DiscountStatisticService : IDiscountStatisticService
     {

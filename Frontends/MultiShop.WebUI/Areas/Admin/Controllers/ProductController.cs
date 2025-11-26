@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MultiShop.DtoLayer.CatalogDtos.CategoryDtos;
 using MultiShop.DtoLayer.CatalogDtos.ProductDtos;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
@@ -30,8 +29,8 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
             return View(values);
         }
 
-        [Route("GetProductsWithCategory")]
-        public async Task<IActionResult> GetProductsWithCategory()
+        [Route("ProductListWithCategory")]
+        public async Task<IActionResult> ProductListWithCategory()
         {
             ProductViewBagList();
             var values = await _productService.GetProductsWithCategoryAsync();
@@ -56,8 +55,23 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("CreateProduct")]
-        public async Task<IActionResult> CreateProduct(CreateProductDto createProductDto)
+        public async Task<IActionResult> CreateProduct(CreateProductDto createProductDto, IFormFile formFile)
         {
+            if (formFile != null)
+            {
+                var extension = Path.GetExtension(formFile.FileName);
+                var imageName = Guid.NewGuid() + extension;
+
+                var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productCoverImages/", imageName);
+
+                using (var stream = new FileStream(location, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(stream);
+                }
+
+                createProductDto.ProductImageUrl = "/images/productCoverImages/" + imageName;
+            }
+
             await _productService.CreateProductAsync(createProductDto);
             return RedirectToAction("ProductListWithCategory", "Product", new { area = "Admin" });
         }
@@ -89,8 +103,23 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("UpdateProduct/{id}")]
-        public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProductDto)
+        public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProductDto, IFormFile formFile)
         {
+            if (formFile != null)
+            {
+                var extension = Path.GetExtension(formFile.FileName);
+                var imageName = Guid.NewGuid() + extension;
+
+                var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productCoverImages/", imageName);
+
+                using (var stream = new FileStream(location, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(stream);
+                }
+
+                updateProductDto.ProductImageUrl = "/images/productCoverImages/" + imageName;
+            }
+
             await _productService.UpdateProductAsync(updateProductDto);
             return RedirectToAction("ProductListWithCategory", "Product", new { area = "Admin" });
         }
