@@ -1,12 +1,11 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/UILayout/_UILayout.cshtml";
 }
 
 <div class="container-fluid">
     <div class="row px-xl-5">
-        
+
         @await Component.InvokeAsync("ShoppingCartProductList")
 
         @*@await Component.InvokeAsync("ShoppingCartCouponDiscount")*@

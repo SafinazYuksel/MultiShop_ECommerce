@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MultiShop.Discount.Entities;
+using System.Collections.Generic;
 using System.Data;
 
 namespace MultiShop.Discount.Context
@@ -18,7 +19,7 @@ namespace MultiShop.Discount.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-P7AHJD6\\SQLEXPRESS;Database=MultiShopDiscountDb;Trusted_Connection=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer(_connectionString);
         }
 
         public DbSet<Coupon> Coupons { get; set; }

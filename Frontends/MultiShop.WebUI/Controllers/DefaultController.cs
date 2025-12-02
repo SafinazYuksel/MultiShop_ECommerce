@@ -6,7 +6,7 @@ namespace MultiShop.WebUI.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.directory1 = "Anasayfa";
+            ViewBag.directory1 = "Ana Sayfa";
             ViewBag.directory2 = "Ürünler";
             ViewBag.directory3 = "Ürün Listesi";
             return View();

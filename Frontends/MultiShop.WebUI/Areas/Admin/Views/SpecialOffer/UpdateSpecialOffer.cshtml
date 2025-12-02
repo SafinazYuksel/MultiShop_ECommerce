@@ -12,7 +12,7 @@
                 <h4>Özel Teklif Güncelleme Sayfası</h4>
                 <br />
                 <div class="bs-example" data-example-id="bordered-table">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="SpecialOfferId" />
                         <label>Teklif Başlığı</label>
                         <input type="text" class="form-control" asp-for="Title" />
@@ -21,7 +21,7 @@
                         <input type="text" class="form-control" asp-for="SubTitle" />
                         <br /
                         <label>Teklif Görseli</label>
-                        <input type="text" class="form-control" asp-for="ImageUrl" />
+                        <input type="file" class="form-control" name="formFile" />
                         <br />
                         <button class="btn btn-success">Özel Teklifi Güncelle</button>
                     </form>

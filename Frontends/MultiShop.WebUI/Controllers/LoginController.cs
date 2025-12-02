@@ -34,10 +34,10 @@ namespace MultiShop.WebUI.Controllers
                 bool result = await _identityService.SignIn(createLoginDto);
                 if (result)
                 {
-                    return RedirectToAction("Index", "User");
+                    return RedirectToAction("Index", "Statistic", new { area = "Admin" });
                 }
                 else
-                { 
+                {
                     ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
                 }
             }

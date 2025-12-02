@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.Discount.Dtos.CouponDtos;
 using MultiShop.Discount.Services;
-using System.Threading.Tasks;
 
 namespace MultiShop.Discount.Controllers
 {

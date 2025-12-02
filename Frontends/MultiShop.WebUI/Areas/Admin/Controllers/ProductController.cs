@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MultiShop.DtoLayer.CatalogDtos.ProductDtos;
+using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers
 {
@@ -14,11 +13,13 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly IFileService _fileService;
 
-        public ProductController(IProductService productService, ICategoryService categoryService)
+        public ProductController(IProductService productService, ICategoryService categoryService, IFileService fileService)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _fileService = fileService;
         }
 
         [Route("Index")]
@@ -57,19 +58,11 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
         [Route("CreateProduct")]
         public async Task<IActionResult> CreateProduct(CreateProductDto createProductDto, IFormFile formFile)
         {
-            if (formFile != null)
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/productCoverImages/");
+
+            if (imagePath != null)
             {
-                var extension = Path.GetExtension(formFile.FileName);
-                var imageName = Guid.NewGuid() + extension;
-
-                var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productCoverImages/", imageName);
-
-                using (var stream = new FileStream(location, FileMode.Create))
-                {
-                    await formFile.CopyToAsync(stream);
-                }
-
-                createProductDto.ProductImageUrl = "/images/productCoverImages/" + imageName;
+                createProductDto.ProductImageUrl = imagePath;
             }
 
             await _productService.CreateProductAsync(createProductDto);
@@ -105,19 +98,11 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
         [Route("UpdateProduct/{id}")]
         public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProductDto, IFormFile formFile)
         {
-            if (formFile != null)
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/productCoverImages/");
+
+            if (imagePath != null)
             {
-                var extension = Path.GetExtension(formFile.FileName);
-                var imageName = Guid.NewGuid() + extension;
-
-                var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productCoverImages/", imageName);
-
-                using (var stream = new FileStream(location, FileMode.Create))
-                {
-                    await formFile.CopyToAsync(stream);
-                }
-
-                updateProductDto.ProductImageUrl = "/images/productCoverImages/" + imageName;
+                updateProductDto.ProductImageUrl = imagePath;
             }
 
             await _productService.UpdateProductAsync(updateProductDto);

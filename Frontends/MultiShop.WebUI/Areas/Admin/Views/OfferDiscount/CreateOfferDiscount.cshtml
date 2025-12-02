@@ -12,7 +12,7 @@
                 <h4>İndirim Teklifi Ekleme Sayfası</h4>
                 <br />
                 <div class="bs-example" data-example-id="bordered-table">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         <label>İndirim Teklifi Başlığı</label>
                         <input type="text" class="form-control" asp-for="Title" />
                         <br />
@@ -20,7 +20,7 @@
                         <input type="text" class="form-control" asp-for="SubTitle" />
                         <br />
                         <label>İndirin Teklifi Görsel</label>
-                        <input type="text" class="form-control" asp-for="ImageUrl" />
+                        <input type="file" class="form-control" name="formFile" />
                         <br />
                         <label>İndirim Teklifi Buton Başlığı</label>
                         <input type="text" class="form-control" asp-for="ButtonTitle" />

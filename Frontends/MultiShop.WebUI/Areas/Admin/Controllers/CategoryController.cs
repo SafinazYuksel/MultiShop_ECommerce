@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.DtoLayer.CatalogDtos.CategoryDtos;
+using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers
@@ -9,10 +11,12 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
+        private readonly IFileService _fileService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, IFileService fileService)
         {
             _categoryService = categoryService;
+            _fileService = fileService;
         }
 
         [Route("Index")]
@@ -33,8 +37,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("CreateCategory")]
-        public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
+        public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/categoryCoverImages/");
+
+            if (imagePath != null)
+            {
+                createCategoryDto.CategoryImageUrl = imagePath;
+            }
+
             await _categoryService.CreateCategoryAsync(createCategoryDto);
             return RedirectToAction("Index", "Category", new { area = "Admin" });
         }
@@ -57,8 +68,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("UpdateCategory/{id}")]
-        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/categoryCoverImages/");
+
+            if (imagePath != null)
+            {
+                updateCategoryDto.CategoryImageUrl = imagePath;
+            }
+
             await _categoryService.UpdateCategoryAsync(updateCategoryDto);
             return RedirectToAction("Index", "Category", new { area = "Admin" });
         }

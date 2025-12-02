@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.DtoLayer.CatalogDtos.BrandDtos;
+using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.CatalogServices.BrandServices;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers
@@ -9,10 +11,12 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
     public class BrandController : Controller
     {
         private readonly IBrandService _brandService;
+        private readonly IFileService _fileService;
 
-        public BrandController(IBrandService brandService)
+        public BrandController(IBrandService brandService, IFileService fileService)
         {
             _brandService = brandService;
+            _fileService = fileService;
         }
 
         [Route("Index")]
@@ -33,8 +37,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [Route("CreateBrand")]
         [HttpPost]
-        public async Task<IActionResult> CreateBrand(CreateBrandDto createBrandDto)
+        public async Task<IActionResult> CreateBrand(CreateBrandDto createBrandDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/specialOfferCoverImages/");
+
+            if (imagePath != null)
+            {
+                createBrandDto.ImageUrl = imagePath;
+            }
+
             await _brandService.CreateBrandAsync(createBrandDto);
             return RedirectToAction("Index", "Brands", new { area = "Admin" });
         }
@@ -57,8 +68,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [Route("UpdateBrand/{id}")]
         [HttpPost]
-        public async Task<IActionResult> UpdateBrand(UpdateBrandDto updateBrandDto)
+        public async Task<IActionResult> UpdateBrand(UpdateBrandDto updateBrandDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/specialOfferCoverImages/");
+
+            if (imagePath != null)
+            {
+                updateBrandDto.ImageUrl = imagePath;
+            }
+
             await _brandService.UpdateBrandAsync(updateBrandDto);
             return RedirectToAction("Index", "Brands", new { area = "Admin" });
         }

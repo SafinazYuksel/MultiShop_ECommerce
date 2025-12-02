@@ -12,7 +12,7 @@
                 <h4>Öne Çıkan Slider Görseli Güncelleme Sayfası</h4>
                 <br />
                 <div class="bs-example" data-example-id="bordered-table">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="FeatureSliderId" />
                         <label>Görsel Başlığı</label>
                         <input type="text" class="form-control" asp-for="Title" />
@@ -21,7 +21,7 @@
                         <input type="text" class="form-control" asp-for="Description" />
                         <br />
                         <label>Görsel Linki</label>
-                        <input type="text" class="form-control" asp-for="ImageUrl" />
+                        <input type="file" class="form-control" name="formFile" />
                         <br />
                         <button class="btn btn-primary">Öne Çıkan Slider Görseli Güncelle</button>
                     </form>

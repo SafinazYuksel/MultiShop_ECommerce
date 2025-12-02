@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.DtoLayer.CatalogDtos.SpecialOfferDtos;
+using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers
@@ -9,10 +11,12 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
     public class SpecialOfferController : Controller
     {
         private readonly ISpecialOfferService _specialOfferService;
+        private readonly IFileService _fileService;
 
-        public SpecialOfferController(ISpecialOfferService specialOfferService)
+        public SpecialOfferController(ISpecialOfferService specialOfferService, IFileService fileService)
         {
             _specialOfferService = specialOfferService;
+            _fileService = fileService;
         }
 
         [Route("Index")]
@@ -33,8 +37,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [Route("CreateSpecialOffer")]
         [HttpPost]
-        public async Task<IActionResult> CreateSpecialOffer(CreateSpecialOfferDto createSpecialOfferDto)
+        public async Task<IActionResult> CreateSpecialOffer(CreateSpecialOfferDto createSpecialOfferDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/specialOfferCoverImages/");
+
+            if (imagePath != null)
+            {
+                createSpecialOfferDto.ImageUrl = imagePath;
+            }
+
             await _specialOfferService.CreateSpecialOfferAsync(createSpecialOfferDto);
             return RedirectToAction("Index", "SpecialOffer", new { area = "Admin" });
         }
@@ -57,8 +68,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [Route("UpdateSpecialOffer/{id}")]
         [HttpPost]
-        public async Task<IActionResult> UpdateSpecialOffer(UpdateSpecialOfferDto updateSpecialOfferDto)
+        public async Task<IActionResult> UpdateSpecialOffer(UpdateSpecialOfferDto updateSpecialOfferDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/specialOfferCoverImages/");
+
+            if (imagePath != null)
+            {
+                updateSpecialOfferDto.ImageUrl = imagePath;
+            }
+
             await _specialOfferService.UpdateSpecialOfferAsync(updateSpecialOfferDto);
             return RedirectToAction("Index", "SpecialOffer", new { area = "Admin" });
         }

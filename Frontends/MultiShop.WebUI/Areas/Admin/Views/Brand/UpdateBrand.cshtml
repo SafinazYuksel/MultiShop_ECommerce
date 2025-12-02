@@ -14,13 +14,13 @@
                 <h4>Marka Ekleme Sayfası</h4>
                 <br />
                 <div class="bs-example" data-example-id="bordered-table">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="BrandId" />
                         <label>Marka Adı</label>
                         <input type="text" class="form-control" asp-for="BrandName" />
                         <br />
                         <label>Marka Görsel</label>
-                        <input type="text" class="form-control" asp-for="ImageUrl" />
+                        <input type="file" class="form-control" name="formFile" />
                         <br />
                         <button class="btn btn-success">Markayı Güncelle</button>
                     </form>

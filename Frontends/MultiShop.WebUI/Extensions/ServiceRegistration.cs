@@ -26,8 +26,9 @@ using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
 using MultiShop.WebUI.Services.CommentServices;
 using MultiShop.WebUI.Services.Concrete;
 using MultiShop.WebUI.Services.DiscountServices;
-using MultiShop.WebUI.Services.ImagesServices;
 using MultiShop.WebUI.Services.MessageServices;
+using MultiShop.WebUI.Services.OrderServices.OrderAddressService;
+using MultiShop.WebUI.Services.OrderServices.OrderAddressServices;
 using MultiShop.WebUI.Services.OrderServices.OrderingServices;
 using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
 using MultiShop.WebUI.Services.StatisticServices.CatalogStatisticServices;
@@ -87,6 +88,7 @@ namespace MultiShop.WebUI.Extensions
 
             services.AddScoped<IValidator<CreateLoginDto>, LoginValidator>();
             services.AddScoped<IValidator<CreateRegisterDto>, RegisterValidator>();
+            services.AddScoped<IFileService, FileService>();
 
             services.Configure<ClientSettings>(configuration.GetSection("ClientSettings"));
             services.Configure<ServiceApiSettings>(configuration.GetSection("ServiceApiSettings"));
@@ -148,7 +150,15 @@ namespace MultiShop.WebUI.Extensions
                 opt.BaseAddress = new Uri(values.IdentityServerUrl);
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
-            services.AddScoped<IOrderingService, OrderingService>();
+            services.AddHttpClient<IOrderingService, OrderingService>(opt =>
+            {
+                opt.BaseAddress = new Uri($"{values.OcelotUrl}/{values.Order.Path}");
+            }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+            services.AddHttpClient<IOrderAddressService, OrderAddressService>(opt =>
+            {
+                opt.BaseAddress = new Uri($"{values.OcelotUrl}/{values.Order.Path}");
+            }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
             services.AddHttpClient<IMessageService, MessageService>(opt =>
             {

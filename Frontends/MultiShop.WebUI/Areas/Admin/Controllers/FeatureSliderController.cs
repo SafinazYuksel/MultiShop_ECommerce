@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.DtoLayer.CatalogDtos.FeatureSliderDtos;
+using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.CatalogServices.FeatureSliderServices;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers
@@ -9,10 +11,12 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
     public class FeatureSliderController : Controller
     {
         private readonly IFeatureSliderService _featureSliderService;
+        private readonly IFileService _fileService;
 
-        public FeatureSliderController(IFeatureSliderService featureSliderService)
+        public FeatureSliderController(IFeatureSliderService featureSliderService, IFileService fileService)
         {
             _featureSliderService = featureSliderService;
+            _fileService = fileService;
         }
 
         [Route("Index")]
@@ -33,8 +37,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [Route("CreateFeatureSlider")]
         [HttpPost]
-        public async Task<IActionResult> CreateFeatureSlider(CreateFeatureSliderDto createFeatureSliderDto)
+        public async Task<IActionResult> CreateFeatureSlider(CreateFeatureSliderDto createFeatureSliderDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/specialOfferCoverImages/");
+
+            if (imagePath != null)
+            {
+                createFeatureSliderDto.ImageUrl = imagePath;
+            }
+
             createFeatureSliderDto.Status = false;
             await _featureSliderService.CreateFeatureSliderAsync(createFeatureSliderDto);
             return RedirectToAction("Index", "FeatureSlider", new { area = "Admin" });
@@ -58,8 +69,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
 
         [Route("UpdateFeatureSlider/{id}")]
         [HttpPost]
-        public async Task<IActionResult> UpdateFeatureSlider(UpdateFeatureSliderDto updateFeatureSliderDto)
+        public async Task<IActionResult> UpdateFeatureSlider(UpdateFeatureSliderDto updateFeatureSliderDto, IFormFile formFile)
         {
+            string imagePath = await _fileService.UploadFileAsync(formFile, "images/specialOfferCoverImages/");
+
+            if (imagePath != null)
+            {
+                updateFeatureSliderDto.ImageUrl = imagePath;
+            }
+
             await _featureSliderService.UpdateFeatureSliderAsync(updateFeatureSliderDto);
             return RedirectToAction("Index", "FeatureSlider", new { area = "Admin" });
         }

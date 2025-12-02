@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MultiShop.Order.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,18 @@ namespace MultiShop.Order.Persistence.Context
 {
     public class OrderContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
+
+        public OrderContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("DefaultConnection");
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost,1440;Database=MultiShopOrderDb;TrustServerCertificate=true;User=sa; Password=123456789aA.;");
+            optionsBuilder.UseSqlServer(_connectionString);
         }
 
         public DbSet<Address> Addresses { get; set; }
