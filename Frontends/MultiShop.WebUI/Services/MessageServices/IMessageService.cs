@@ -6,5 +6,6 @@ namespace MultiShop.WebUI.Services.MessageServices
     {
         Task<List<ResultInboxMessageDto>> GetInboxMessageAsync(string receiverId);
         Task<List<ResultSendboxMessageDto>> GetSendboxMessageAsync(string senderId);
+        Task<int> GetTotalMessageCountByReceiverId(string id);
     }
 }

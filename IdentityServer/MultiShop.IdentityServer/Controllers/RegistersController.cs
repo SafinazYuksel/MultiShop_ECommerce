@@ -22,8 +22,8 @@ namespace MultiShop.IdentityServer.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UserRegister(UserRegisterDto userRegisterDto)
+        [HttpPost("AdminRegister")]
+        public async Task<IActionResult> AdminRegister(UserRegisterDto userRegisterDto)
         {
             var values = new ApplicationUser()
             {
@@ -36,6 +36,30 @@ namespace MultiShop.IdentityServer.Controllers
             var result = await _userManager.CreateAsync(values, userRegisterDto.Password);
             if(result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(values, "Admin");
+                return Ok("Kullanıcı başarıyla eklendi.");
+            }
+            else
+            {
+                return Ok("Bir hata oluştu tekrar deneyiniz.");
+            }
+        }
+
+        [HttpPost("UserRegister")]
+        public async Task<IActionResult> UserRegister(UserRegisterDto userRegisterDto)
+        {
+            var values = new ApplicationUser()
+            {
+                UserName = userRegisterDto.Username,
+                Email = userRegisterDto.Email,
+                Name = userRegisterDto.Name,
+                Surname = userRegisterDto.Surname,
+            };
+
+            var result = await _userManager.CreateAsync(values, userRegisterDto.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(values, "Member");
                 return Ok("Kullanıcı başarıyla eklendi.");
             }
             else

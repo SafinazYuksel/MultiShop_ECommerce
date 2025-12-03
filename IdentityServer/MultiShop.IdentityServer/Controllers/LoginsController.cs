@@ -22,19 +22,72 @@ namespace MultiShop.IdentityServer.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UserLogin(UserLoginDto userLoginDto)
+        [HttpPost("AdminLogin")]
+        public async Task<IActionResult> AdminLogin(UserLoginDto userLoginDto)
         {
-            var result = await _signInManager.PasswordSignInAsync(userLoginDto.Username, userLoginDto.Password, false, false);
+            var user = await _userManager.FindByNameAsync(userLoginDto.Username);
+
+            if (user == null)
+            {
+                return BadRequest("Kullanıcı adı veya şifre hatalı!");
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, userLoginDto.Password, false);
 
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(userLoginDto.Username);
-                GetCheckAppUserViewModel model = new GetCheckAppUserViewModel();
-                model.Username = userLoginDto.Username;
-                model.Id = user.Id;
-                var token = JwtTokenGenerator.GenerateToken(model);
+                var roles = await _userManager.GetRolesAsync(user);
 
+                if (!roles.Contains("Admin"))
+                {
+                    return StatusCode(403, "Bu panele erişim yetkiniz yok! (Sadece Adminler girebilir)");
+                }
+
+                GetCheckAppUserViewModel model = new GetCheckAppUserViewModel
+                {
+                    Username = userLoginDto.Username,
+                    Id = user.Id,
+                    Role = "Admin"
+                };
+
+                var token = JwtTokenGenerator.GenerateToken(model);
+                return Ok(token);
+            }
+            else
+            {
+                return BadRequest("Kullanıcı adı veya şifre hatalı!");
+            }
+        }
+
+        [HttpPost("UserLogin")]
+        public async Task<IActionResult> UserLogin(UserLoginDto userLoginDto)
+        {
+            var user = await _userManager.FindByNameAsync(userLoginDto.Username);
+
+            if (user == null)
+            {
+                return BadRequest("Kullanıcı adı veya şifre hatalı!");
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, userLoginDto.Password, false);
+
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (!roles.Contains("Admin"))
+                {
+                    return StatusCode(403, "Bu panele erişim yetkiniz yok! (Sadece Adminler girebilir)");
+                }
+
+                GetCheckAppUserViewModel model = new GetCheckAppUserViewModel
+                {
+                    Username = userLoginDto.Username,
+                    Id = user.Id,
+                    Role = "Admin"
+                };
+
+                var token = JwtTokenGenerator.GenerateToken(model);
                 return Ok(token);
             }
             else
