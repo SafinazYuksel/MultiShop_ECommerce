@@ -4,22 +4,30 @@ namespace MultiShop.WebUI.Controllers
 {
     public class ErrorPageController : Controller
     {
-        [Route("ErrorPage/Error401")]
-        public IActionResult Error401()
+        [Route("ErrorPage/Index/{code}")]
+        public IActionResult Index(int code)
         {
-            return View();
-        }
+            switch (code)
+            {
+                case 404:
+                    ViewBag.ErrorMessage = "Aradığınız sayfa bulunamadı.";
+                    return View("Error404");
 
-        [Route("ErrorPage/Error404")]
-        public IActionResult Error404()
-        {
-            return View();
-        }
+                case 401:
+                    ViewBag.ErrorMessage = "Bu sayfaya erişim yetkiniz yok.";
+                    return View("Error401");
 
-        [Route("ErrorPage/Error500")]
-        public IActionResult Error500()
-        {
-            return View();
+                case 403:
+                    ViewBag.ErrorMessage = "Bu işlem için yetkiniz kısıtlı.";
+                    return View("Error403");
+
+                case 500:
+                    ViewBag.ErrorMessage = "Sunucuda bir hata oluştu. Teknik ekibimiz ilgileniyor.";
+                    return View("Error500");
+
+                default:
+                    return View("ErrorGeneral");
+            }
         }
     }
 }

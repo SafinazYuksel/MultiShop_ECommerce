@@ -16,8 +16,26 @@ namespace MultiShop.WebUI.ViewComponents.ProductDetailViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(string id)
         {
-            var value = await _productService.GetByIdProductAsync(id);
-            return View(value);
+            if (string.IsNullOrEmpty(id))
+            {
+                return View(new UpdateProductDto());
+            }
+
+            try
+            {
+                var values = await _productService.GetByIdProductAsync(id);
+
+                if (values == null)
+                {
+                    return View(new UpdateProductDto());
+                }
+
+                return View(values);
+            }
+            catch (System.Exception)
+            {
+                return View(new UpdateProductDto());
+            }
         }
     }
 }

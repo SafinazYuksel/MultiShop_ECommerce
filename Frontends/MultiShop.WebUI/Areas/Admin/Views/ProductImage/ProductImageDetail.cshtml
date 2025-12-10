@@ -16,18 +16,30 @@
                     <form method="post">
                         <input type="hidden" asp-for="ProductImageId" />
                         <input type="hidden" asp-for="ProductId" />
-                        <label>Görsel 1</label>
-                        <input type="text" class="form-control" asp-for="ProductImage1" />
-                        <br />
-                        <label>Görsel 2</label>
-                        <input type="text" class="form-control" asp-for="ProductImage2" />
-                        <br />
-                        <label>Görsel 3</label>
-                        <input type="text" class="form-control" asp-for="ProductImage3" />
-                        <br />
-                        <label>Görsel 4</label>
-                        <input type="text" class="form-control" asp-for="ProductImage4" />
-                        <br />
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Görseli - 1</label>
+                                <input type="file" class="form-control" name="formFile" asp-for="ProductImage1" />
+                            </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Görseli - 2</label>
+                                <input type="file" class="form-control" name="formFile" asp-for="ProductImage2" />
+                            </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Görseli - 3</label>
+                                <input type="file" class="form-control" name="formFile" asp-for="ProductImage3" />
+                            </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Görseli - 4</label>
+                                <input type="file" class="form-control" name="formFile" asp-for="ProductImage4" />
+                            </fieldset>
+                        </div>
                         <button class="btn btn-success">Ürün Görsellerini Güncelle</button>
                     </form>
 

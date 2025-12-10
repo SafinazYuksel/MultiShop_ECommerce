@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.DtoLayer.IdentityDtos.LoginDto;
 using MultiShop.WebUI.Services.Abstract;
 
@@ -37,6 +39,13 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
                 }
             }
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("SingIn", "Login", new { area = "Admin" });
         }
     }
 }

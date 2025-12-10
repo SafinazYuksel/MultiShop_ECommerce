@@ -31,6 +31,7 @@ using MultiShop.WebUI.Services.OrderServices.OrderAddressService;
 using MultiShop.WebUI.Services.OrderServices.OrderAddressServices;
 using MultiShop.WebUI.Services.OrderServices.OrderingServices;
 using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
+using MultiShop.WebUI.Services.PaymentServices;
 using MultiShop.WebUI.Services.StatisticServices.CatalogStatisticServices;
 using MultiShop.WebUI.Services.StatisticServices.CommentStatisticServices;
 using MultiShop.WebUI.Services.StatisticServices.DiscountStatisticServices;
@@ -48,8 +49,8 @@ namespace MultiShop.WebUI.Extensions
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddCookie(JwtBearerDefaults.AuthenticationScheme, opt =>
             {
-                opt.LoginPath = "/Login/Index/";
-                opt.LogoutPath = "/Login/LogOut/";
+                opt.LoginPath = "/User/Login/Index/";
+                opt.LogoutPath = "/User/Login/Logout";
                 opt.AccessDeniedPath = "/Pages/AccessDenied/";
                 opt.Cookie.HttpOnly = true;
                 opt.Cookie.SameSite = SameSiteMode.Strict;
@@ -59,7 +60,8 @@ namespace MultiShop.WebUI.Extensions
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
             {
-                opt.LoginPath = "/Login/Index/";
+                opt.LoginPath = "/User/Login/Index/";
+                opt.LogoutPath = "/User/Login/Logout";
                 opt.ExpireTimeSpan = TimeSpan.FromDays(5);
                 opt.Cookie.Name = "MultiShopCookie";
                 opt.SlidingExpiration = true;
@@ -113,6 +115,11 @@ namespace MultiShop.WebUI.Extensions
             services.AddHttpClient<IDiscountService, DiscountService>(opt =>
             {
                 opt.BaseAddress = new Uri($"{values.OcelotUrl}/{values.Discount.Path}");
+            }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+            services.AddHttpClient<IPaymentService, PaymentService>(opt =>
+            {
+                opt.BaseAddress = new Uri($"{values.OcelotUrl}/{values.Payment.Path}");
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
             services.AddHttpClient<ICargoCompanyService, CargoCompanyService>(opt =>

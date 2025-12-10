@@ -10,14 +10,14 @@
     <div class="row">
         <div class="col-md-12">
             <div class="chart-box">
-                <div class="bs-example" data-example-id="bordered-table">
-                    <table class="table table-bordered">
+                <div class="bs-example" data-example-id="hoverable-table">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Kategori Adı</th>
-                                <th>Sil</th>
-                                <th>Güncelle</th>
+                                <th>Durumu</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -27,13 +27,35 @@
                                 <tr>
                                     <th scope="row">@count</th>
                                     <td>@item.CategoryName</td>
-                                    <td><a href="/Admin/Category/DeleteCategory/@item.CategoryId" class="btn btn-danger">Sil</a></td>
-                                    <td><a href="/Admin/Category/UpdateCategory/@item.CategoryId" class="btn btn-success">Güncelle</a></td>
+                                    <td class="text-truncate tablesort-3">
+                                        @if (item.Status)
+                                        {
+                                            <span class="lable-tag tag-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="lable-tag tag-unpaid">Pasif</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Status)
+                                        {
+                                            <a href="/Admin/Category/ChangeStatus/@item.CategoryId" class="btn btn-sm btn-warning btn-rounded">Pasif Yap</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/Admin/Category/ChangeStatus/@item.CategoryId" class="btn btn-sm btn-success btn-rounded">Aktif Yap</a>
+                                        }
+
+                                        <a href="/Admin/Category/UpdateCategory/@item.CategoryId" class="btn btn-sm btn-info btn-rounded">Güncelle</a>
+                                        <a href="/Admin/Category/DeleteCategory/@item.CategoryId" class="btn btn-sm btn-danger btn-rounded">Sil</a>
+
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-                    <a href="/Admin/Category/CreateCategory/" class="btn btn-primary">Yeni Kategori Girişi</a>
+                    <a href="/Admin/Category/CreateCategory/" class="btn btn-primary btn-rounded">Kategori Ekle</a>
                 </div>
             </div>
         </div>

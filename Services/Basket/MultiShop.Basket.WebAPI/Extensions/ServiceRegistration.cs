@@ -10,13 +10,6 @@ namespace MultiShop.Basket.WebAPI.Extensions
     {
         public static IServiceCollection AddBasketServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            {
-                opt.Authority = configuration["IdentityServerUrl"];
-                opt.Audience = "ResourceBasket";
-                opt.RequireHttpsMetadata = false;
-            });
-
             // Add services to the container.
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<ILoginService, LoginService>();

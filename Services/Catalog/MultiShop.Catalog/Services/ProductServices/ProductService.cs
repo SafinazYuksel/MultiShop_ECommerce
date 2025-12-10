@@ -38,6 +38,31 @@ namespace MultiShop.Catalog.Services.ProductServices
             return _mapper.Map<List<ResultProductDto>>(values);
         }
 
+        public async Task<List<ResultProductDto>> GetAllProductSortByPriceAsync(string? sortType)
+        {
+            var filter = Builders<Product>.Filter.Empty;
+            var query = _productCollection.Find(filter);
+
+            if (!string.IsNullOrEmpty(sortType))
+            {
+                switch (sortType)
+                {
+                    case "price_asc":
+                        var sortAsc = Builders<Product>.Sort.Ascending(x => x.ProductPrice);
+                        query = query.Sort(sortAsc);
+                        break;
+
+                    case "price_desc":
+                        var sortDesc = Builders<Product>.Sort.Descending(x => x.ProductPrice);
+                        query = query.Sort(sortDesc);
+                        break;
+                }
+            }
+
+            var values = await query.ToListAsync();
+            return _mapper.Map<List<ResultProductDto>>(values);
+        }
+
         public async Task<GetByIdProductDto> GetByIdProductAsync(string id)
         {
             var value = await _productCollection.Find(x => x.ProductId == id).FirstOrDefaultAsync();
@@ -65,6 +90,12 @@ namespace MultiShop.Catalog.Services.ProductServices
                 item.Category = await _categoryCollection.Find<Category>(x => x.CategoryId == item.CategoryId).FirstAsync();
             }
             return _mapper.Map<List<ResultProductsWithCategoryDto>>(values);
+        }
+
+        public async Task<List<ResultProductDto>> GetTop8ProductAsync()
+        {
+            var values = await _productCollection.Find(x=> true).Limit(8).ToListAsync();
+            return _mapper.Map<List<ResultProductDto>>(values);
         }
 
         public async Task UpdateProductAsync(UpdateProductDto updateProductDto)

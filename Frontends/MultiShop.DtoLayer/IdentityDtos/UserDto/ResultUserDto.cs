@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,19 +12,12 @@ namespace MultiShop.DtoLayer.IdentityDtos.UserDto
         public string Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string UserName { get; set; }
-        public string NormalizedUserName { get; set; }
+        public string Username { get; set; }
         public string Email { get; set; }
-        public string NormalizedEmail { get; set; }
-        public bool EmailConfirmed { get; set; }
-        public string PasswordHash { get; set; }
-        public string SecurityStamp { get; set; }
-        public string ConcurrencyStamp { get; set; }
-        public object PhoneNumber { get; set; }
-        public bool PhoneNumberConfirmed { get; set; }
-        public bool TwoFactorEnabled { get; set; }
-        public object LockoutEnd { get; set; }
-        public bool LockoutEnabled { get; set; }
-        public int AccessFailedCount { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Country { get; set; }
+        public string? City { get; set; }
+        public string? Website { get; set; }
+        public string? Bio { get; set; }
     }
 }

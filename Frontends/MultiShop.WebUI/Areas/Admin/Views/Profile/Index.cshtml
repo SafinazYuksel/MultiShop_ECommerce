@@ -1,0 +1,89 @@
+﻿@model ResultUserDto
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="chart-box">
+        <h4>Kullanıcı Profili</h4>
+        <div class="row">
+            <form method="post" enctype="multipart/form-data">
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Adınız</label>
+                        <input type="text" class="form-control" asp-for="Name">
+                        <span class="fa fa-user form-control-feedback" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Soyadınız</label>
+                        <input type="text" class="form-control" asp-for="Surname">
+                        <span class="fa fa-user form-control-feedback" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Kullanıcı Adınız</label>
+                        <input type="text" class="form-control" asp-for="Username">
+                        <span class="fa fa-user form-control-feedback" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">E-mail Adresi</label>
+                        <input type="email" class="form-control" asp-for="Email">
+                        <span class="fa fa-envelope-o form-control-feedback" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Telefon Numarası</label>
+                        <input type="text" class="form-control" asp-for="PhoneNumber" />
+                        <span class="fa fa-phone form-control-feedback" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Ülke</label>
+                        <input type="text" class="form-control" asp-for="Country" />
+                        <span class="fa fa-briefcase form-control-feedback" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Şehir</label>
+                        <input type="text" class="form-control" asp-for="City" />
+                        <span class="fa fa-globe form-control-feedback" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">İnternet Sayfası</label>
+                        <input type="text" class="form-control" asp-for="Website" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Bio</label>
+                        <textarea class="form-control" id="placeTextarea" rows="3" asp-for="Bio"></textarea>
+                    </div>
+                </div>
+
+                @* <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                        <label class="custom-file center-block block">
+                            <input id="file" class="custom-file-input" type="file">
+                            <span class="custom-file-control"></span>
+                        </label>
+                    </div>
+                </div> *@
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-default">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

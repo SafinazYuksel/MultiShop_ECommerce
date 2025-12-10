@@ -17,20 +17,49 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
             _productDetailService = productDetailService;
         }
 
-        [Route("UpdateProductDetail/{id}")]
+        [Route("AddOrUpdateProductDetail/{id}")]
         [HttpGet]
-        public async Task<IActionResult> UpdateProductDetail(string id)
+        public async Task<IActionResult> AddOrUpdateProductDetail(string id)
         {
             ProductDetailViewBagList();
+
             var value = await _productDetailService.GetByIdProductDetailAsync(id);
+
+            if (value == null)
+            {
+                ViewBag.IsUpdate = false;
+                var newDetail = new UpdateProductDetailDto
+                {
+                    ProductId = id,
+                    ProductDetailId = ""
+                };
+                return View(newDetail);
+            }
+
+            ViewBag.IsUpdate = true;
             return View(value);
         }
 
-        [Route("UpdateProductDetail/{id}")]
+        [Route("AddOrUpdateProductDetail/{id}")]
         [HttpPost]
-        public async Task<IActionResult> UpdateProductDetail(UpdateProductDetailDto updateProductDetailDto)
+        public async Task<IActionResult> AddOrUpdateProductDetail(UpdateProductDetailDto updateProductDetailDto)
         {
-            await _productDetailService.UpdateProductDetailAsync(updateProductDetailDto);
+            if (string.IsNullOrEmpty(updateProductDetailDto.ProductDetailId))
+            {
+                var createDto = new CreateProductDetailDto
+                {
+                    ProductId = updateProductDetailDto.ProductId,
+                    ProductDescription = updateProductDetailDto.ProductDescription,
+                    ProductInformation = updateProductDetailDto.ProductInformation
+                };
+
+                await _productDetailService.CreateProductDetailAsync(createDto);
+            }
+            else
+            {
+                await _productDetailService.UpdateProductDetailAsync(updateProductDetailDto);
+            }
+
             return RedirectToAction("ProductListWithCategory", "Product", new { area = "Admin" });
         }
 

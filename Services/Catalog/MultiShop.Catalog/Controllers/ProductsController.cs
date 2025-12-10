@@ -18,10 +18,24 @@ namespace MultiShop.Catalog.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllProduct")]
         public async Task<IActionResult> GetAllProduct()
         {
             var values = await _productService.GetAllProductAsync();
+            return Ok(values);
+        }
+
+        [HttpGet("GetTop8Product")]
+        public async Task<IActionResult> GetTop8Product()
+        {
+            var values = await _productService.GetTop8ProductAsync();
+            return Ok(values);
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetAllProductSortByPrice([FromQuery] string? sort)
+        {
+            var values = await _productService.GetAllProductSortByPriceAsync(sort);
             return Ok(values);
         }
 

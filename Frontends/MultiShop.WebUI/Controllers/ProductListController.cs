@@ -44,26 +44,32 @@ namespace MultiShop.WebUI.Controllers
         [HttpGet]
         public PartialViewResult AddComment(string id)
         {
-            ViewBag.Id = id;
-            return PartialView();
+            var model = new CreateCommentDto { ProductId = id };
+            return PartialView(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddComment(CreateCommentDto createCommentDto)
         {
-            createCommentDto.ImageUrl = "test";
-            createCommentDto.Rating = 1;
             createCommentDto.CreatedDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-            createCommentDto.Status = false;
-            createCommentDto.ProductId = "65dc67a7705038bfa8fb1f87";
+            createCommentDto.Status = true;
+
+            if (string.IsNullOrEmpty(createCommentDto.ImageUrl))
+            {
+                createCommentDto.ImageUrl = "~/images/noname.jpg";
+            }
+
             var client = _httpClientFactory.CreateClient();
             var jsonData = JsonConvert.SerializeObject(createCommentDto);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
             var responseMessage = await client.PostAsync("https://localhost:7075/api/Comments", stringContent);
+
             if (responseMessage.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index", "Default");
+                return RedirectToAction("ProductDetail", "ProductList", new { id = createCommentDto.ProductId });
             }
+
             return View();
         }
     }

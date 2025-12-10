@@ -22,6 +22,7 @@ namespace MultiShop.Catalog.Services.CategoryServices
         public async Task CreateCategoryAsync(CreateCategoryDto createCategoryDto)
         {
             var value = _mapper.Map<Category>(createCategoryDto);
+            value.Status = true;
             await _categoryCollection.InsertOneAsync(value);
         }
 
@@ -46,6 +47,17 @@ namespace MultiShop.Catalog.Services.CategoryServices
         {
             var value = _mapper.Map<Category>(updateCategoryDto);
             await _categoryCollection.FindOneAndReplaceAsync(x => x.CategoryId == updateCategoryDto.CategoryId, value);
+        }
+
+        public async Task ChangeCategoryStatus(string id)
+        {
+            var category = await _categoryCollection.Find(x => x.CategoryId == id).FirstOrDefaultAsync();
+
+            if (category != null)
+            {
+                category.Status = !category.Status;
+                await _categoryCollection.FindOneAndReplaceAsync(x => x.CategoryId == id, category);
+            }
         }
     }
 }

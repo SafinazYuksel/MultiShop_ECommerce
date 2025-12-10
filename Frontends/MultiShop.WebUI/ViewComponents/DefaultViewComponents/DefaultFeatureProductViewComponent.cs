@@ -17,7 +17,7 @@ namespace MultiShop.WebUI.ViewComponents.DefaultViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var values = await _productService.GetAllProductAsync();
+            var values = await _productService.GetTop8ProductAsync();
             return View(values);
         }
     }

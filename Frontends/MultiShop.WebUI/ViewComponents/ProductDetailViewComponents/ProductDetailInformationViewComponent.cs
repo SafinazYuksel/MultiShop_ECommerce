@@ -13,11 +13,29 @@ namespace MultiShop.WebUI.ViewComponents.ProductDetailViewComponents
         {
             _productDetailService = productDetailService;
         }
-
+        
         public async Task<IViewComponentResult> InvokeAsync(string id)
         {
-            var value = await _productDetailService.GetByIdProductDetailAsync(id);
-            return View(value);
+            if (string.IsNullOrEmpty(id))
+            {
+                return View(new UpdateProductDetailDto());
+            }
+
+            try
+            {
+                var values = await _productDetailService.GetByIdProductDetailAsync(id);
+
+                if (values == null)
+                {
+                    return View(new UpdateProductDetailDto());
+                }
+
+                return View(values);
+            }
+            catch (System.Exception)
+            {
+                return View(new UpdateProductDetailDto());
+            }
         }
     }
 }

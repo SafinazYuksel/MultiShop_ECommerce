@@ -12,26 +12,39 @@
                 <h4>Ürün Ekleme Sayfası</h4>
                 <br />
                 <div class="bs-example" data-example-id="bordered-table">
-
                     <form method="post" enctype="multipart/form-data">
-                        <label>Ürün Adı</label>
-                        <input type="text" class="form-control" asp-for="ProductName" />
-                        <br />
-                        <label>Ürün Fiyatı</label>
-                        <input type="text" class="form-control" asp-for="ProductPrice" />
-                        <br />
-                        <label>Ürün Görseli</label>
-                        <input type="file" class="form-control" name="formFile" />
-                        <br />
-                        <label>Ürün Kategorisi</label>
-                        @Html.DropDownListFor(x => x.CategoryId, (List<SelectListItem>)ViewBag.categories, new { @class = "form-control" })
-                        <br />
-                        <label>Ürün Açıklaması</label>
-                        <textarea class="form-control" asp-for="ProductDescription" rows="5"></textarea>
-                        <br />
-                        <button class="btn btn-primary">Ürünü Ekle</button>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Adı</label>
+                                <input type="text" class="form-control" asp-for="ProductName" />
+                            </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Fiyatı</label>
+                                <input type="text" class="form-control" asp-for="ProductPrice" />
+                            </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Görseli</label>
+                                <input type="file" class="form-control" name="formFile" />
+                            </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Kategorisi</label>
+                                @Html.DropDownListFor(x => x.CategoryId, (List<SelectListItem>)ViewBag.categories, new { @class = "form-control" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label>Ürün Açıklaması</label>
+                                <textarea class="form-control" asp-for="ProductDescription" rows="5"></textarea>
+                            </fieldset>
+                        </div>
+                        <button class="btn btn-primary btn-rounded">Ürünü Ekle</button>
                     </form>
-
                 </div>
             </div>
         </div>

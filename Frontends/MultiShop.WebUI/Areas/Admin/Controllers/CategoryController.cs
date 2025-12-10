@@ -29,6 +29,13 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
             return View(values);
         }
 
+        [Route("ChangeStatus/{id}")]
+        public async Task<IActionResult> ChangeStatus(string id)
+        {
+            await _categoryService.ChangeCategoryStatus(id);
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         [Route("CreateCategory")]
         public async Task<IActionResult> CreateCategory()

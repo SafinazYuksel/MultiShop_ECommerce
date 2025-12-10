@@ -12,9 +12,9 @@ namespace MultiShop.WebUI.ViewComponents.ProductListViewComponents
             _productService = productService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(string? sort)
         {
-            var values = await _productService.GetAllProductAsync();
+            var values = await _productService.GetAllProductSortByPriceAsync(sort);
             return View(values);
         }
     }

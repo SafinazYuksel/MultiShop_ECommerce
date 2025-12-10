@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "ProductGetAll";
     Layout = "~/Views/UILayout/_UILayout.cshtml";
 }
@@ -8,11 +7,9 @@
     <div class="row px-xl-5">
         <div class="col-lg-3 col-md-4">
 
+            @await Component.InvokeAsync("ProductListCategoryFilter", new { categoryId = Context.Request.Query["categoryId"].ToString() })
+
             @await Component.InvokeAsync("ProductListPriceFilter")
-
-            @await Component.InvokeAsync("ProductListColorFilter")
-
-            @await Component.InvokeAsync("ProductListSizeFilter")
 
         </div>
         <div class="col-lg-9 col-md-8">
@@ -20,7 +17,7 @@
 
                 @await Component.InvokeAsync("ProductListGetProductCount")
 
-                @await Component.InvokeAsync("ProductListGetAll")
+                @await Component.InvokeAsync("ProductListGetAll", new { sort = Context.Request.Query["sort"].ToString() })
 
                 @await Component.InvokeAsync("ProductListPagination")
 

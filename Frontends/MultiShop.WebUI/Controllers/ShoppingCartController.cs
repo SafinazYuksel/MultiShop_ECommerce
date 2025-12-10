@@ -21,32 +21,44 @@ namespace MultiShop.WebUI.Controllers
             ViewBag.code = code;
             ViewBag.discountRate = discountRate;
             ViewBag.totalNewPriceWithDiscount = totalNewPriceWithDiscount;
-
-            ViewBag.directory1 = "Anasayfa";
+            ViewBag.directory1 = "Ana Sayfa";
             ViewBag.directory2 = "Ürünler";
             ViewBag.directory3 = "Sepetim";
 
             var values = await _basketService.GetBasket();
+            if (values == null)
+            {
+                ViewBag.total = 0;
+                ViewBag.totalPriceWithTax = 0;
+                ViewBag.tax = 0;
+                return View(new BasketTotalDto());
+            }
+
             ViewBag.total = values.TotalPrice;
-            var totalPriceWithTax = values.TotalPrice + values.TotalPrice / 100 * 10;
             var tax = values.TotalPrice / 100 * 10;
+            var totalPriceWithTax = values.TotalPrice + tax;
             ViewBag.totalPriceWithTax = totalPriceWithTax;
             ViewBag.tax = tax;
-
-            return View();
+            return View(values);
         }
 
         public async Task<IActionResult> AddBasketItem(string id)
         {
             var values = await _productService.GetByIdProductAsync(id);
+            if (values == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             var items = new BasketItemDto
             {
                 ProductId = values.ProductId,
                 ProductName = values.ProductName,
-                ProductImageUrl = values.ProductImageUrl,
                 Price = values.ProductPrice,
-                Quantity = 1
+                Quantity = 1,
+                ProductImageUrl = values.ProductImageUrl
             };
+
             await _basketService.AddBasketItem(items);
             return RedirectToAction("Index");
         }

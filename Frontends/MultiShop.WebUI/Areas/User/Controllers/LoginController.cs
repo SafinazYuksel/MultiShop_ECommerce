@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.DtoLayer.IdentityDtos.LoginDto;
 using MultiShop.WebUI.Services.Abstract;
 
@@ -29,7 +31,7 @@ namespace MultiShop.WebUI.Areas.User.Controllers
 
                 if (result)
                 {
-                    return RedirectToAction("Index", "Profile", new { area = "User" });
+                    return RedirectToAction("Index", "Default", new { area = "" });
                 }
                 else
                 {
@@ -37,6 +39,13 @@ namespace MultiShop.WebUI.Areas.User.Controllers
                 }
             }
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Default", new { area = "" });
         }
     }
 }

@@ -35,11 +35,17 @@ namespace MultiShop.Catalog.Services.StatisticServices
         {
             var filter = Builders<Product>.Filter.Empty;
             var sort = Builders<Product>.Sort.Descending(x => x.ProductPrice);
-            var projection = Builders<Product>.Projection
-                .Include(y => y.ProductName).Exclude("ProductId");
+            var projection = Builders<Product>.Projection.Include(y => y.ProductName).Exclude("ProductId");
 
             var product = await _productCollection.Find(filter)
-                .Sort(sort).Project(projection).FirstOrDefaultAsync();
+                .Sort(sort)
+                .Project(projection)
+                .FirstOrDefaultAsync();
+
+            if (product == null)
+            {
+                return "-";
+            }
 
             return product.GetValue("ProductName").AsString;
         }
@@ -53,6 +59,11 @@ namespace MultiShop.Catalog.Services.StatisticServices
 
             var product = await _productCollection.Find(filter)
                 .Sort(sort).Project(projection).FirstOrDefaultAsync();
+
+            if (product == null)
+            {
+                return "-";
+            }
 
             return product.GetValue("ProductName").AsString;
         }
@@ -70,6 +81,12 @@ namespace MultiShop.Catalog.Services.StatisticServices
 
             var result = await _productCollection.AggregateAsync<BsonDocument>(pipeline);
             var values = result.FirstOrDefault().GetValue("averagePrice", decimal.Zero).AsDecimal;
+
+            if (values == null)
+            {
+                return 00;
+            }
+
             return values;
         }
 

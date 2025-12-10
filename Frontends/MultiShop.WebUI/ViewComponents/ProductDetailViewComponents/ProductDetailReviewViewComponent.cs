@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MultiShop.DtoLayer.CommentDtos;
 using MultiShop.WebUI.Services.CommentServices;
 
 namespace MultiShop.WebUI.ViewComponents.ProductDetailViewComponents
@@ -14,8 +15,26 @@ namespace MultiShop.WebUI.ViewComponents.ProductDetailViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(string id)
         {
-            var values = await _commentService.GetCommentListByProductId(id);
-            return View(values);
+            if (string.IsNullOrEmpty(id))
+            {
+                return View(new List<ResultCommentDto>());
+            }
+
+            try
+            {
+                var values = await _commentService.GetCommentListByProductId(id);
+
+                if (values == null)
+                {
+                    return View(new List<ResultCommentDto>());
+                }
+
+                return View(values);
+            }
+            catch (System.Exception)
+            {
+                return View(new List<ResultCommentDto>());
+            }
         }
     }
 }

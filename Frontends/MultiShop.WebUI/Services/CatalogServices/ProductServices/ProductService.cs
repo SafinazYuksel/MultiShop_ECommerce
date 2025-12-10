@@ -1,4 +1,5 @@
-﻿using MultiShop.DtoLayer.CatalogDtos.ProductDtos;
+﻿using Microsoft.EntityFrameworkCore;
+using MultiShop.DtoLayer.CatalogDtos.ProductDtos;
 using Newtonsoft.Json;
 
 namespace MultiShop.WebUI.Services.CatalogServices.ProductServices
@@ -22,12 +23,33 @@ namespace MultiShop.WebUI.Services.CatalogServices.ProductServices
             await _httpClient.DeleteAsync("products?id=" + id);
         }
 
+        public async Task<List<ResultProductDto>> GetAllProductSortByPriceAsync(string? sortType)
+        {
+            string requestUrl = "products";
+
+            if (!string.IsNullOrEmpty(sortType))
+            {
+                requestUrl += $"?sort={sortType}";
+            }
+
+            var responseMessage = await _httpClient.GetAsync(requestUrl);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var jsonData = await responseMessage.Content.ReadAsStringAsync();
+                var values = JsonConvert.DeserializeObject<List<ResultProductDto>>(jsonData);
+                return values;
+            }
+
+            return new List<ResultProductDto>();
+        }
+
         public async Task<List<ResultProductDto>> GetAllProductAsync()
         {
             var responseMessage = await _httpClient.GetAsync("products");
             var jsonData = await responseMessage.Content.ReadAsStringAsync();
-            var values = JsonConvert.DeserializeObject<List<ResultProductDto>>(jsonData);
-            return values;
+            var value = JsonConvert.DeserializeObject<List<ResultProductDto>>(jsonData);
+            return value;
         }
 
         public async Task<UpdateProductDto> GetByIdProductAsync(string id)
@@ -51,6 +73,14 @@ namespace MultiShop.WebUI.Services.CatalogServices.ProductServices
             var responseMessage = await _httpClient.GetAsync("products/GetProductsWithCategory");
             var jsonData = await responseMessage.Content.ReadAsStringAsync();
             var values = JsonConvert.DeserializeObject<List<ResultProductsWithCategoryDto>>(jsonData);
+            return values;
+        }
+
+        public async Task<List<ResultProductDto>> GetTop8ProductAsync()
+        {
+            var responseMessage = await _httpClient.GetAsync("products/GetTop8Product");
+            var jsonData = await responseMessage.Content.ReadAsStringAsync();
+            var values = JsonConvert.DeserializeObject<List<ResultProductDto>>(jsonData);
             return values;
         }
 

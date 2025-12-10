@@ -24,9 +24,24 @@ namespace MultiShop.Basket.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBasketDetail()
         {
-            var userClaims = User.Claims;
-            var values = await _basketService.GetBasket(_loginService.GetUserId);
-            return Ok(values);
+            var userId = _loginService.GetUserId;
+
+            // Eğer Token'dan ID okunamadıysa işlem yapma (veya Anonim id ata)
+            if (string.IsNullOrEmpty(userId))
+            {
+                // Geçici çözüm veya hata mesajı
+                return BadRequest("Kullanıcı kimliği doğrulanamadı.");
+            }
+
+            var values1 = await _basketService.GetBasket(userId);
+
+            // ... (kodunuzun devamı aynı kalabilir) ...
+            if (values1 == null)
+            {
+                var values = await _basketService.GetBasket(_loginService.GetUserId);
+                return Ok(values);
+            }
+            return Ok();
         }
 
         [HttpPost]

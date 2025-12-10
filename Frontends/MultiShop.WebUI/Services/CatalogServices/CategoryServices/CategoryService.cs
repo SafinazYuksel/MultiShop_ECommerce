@@ -13,8 +13,14 @@ namespace MultiShop.WebUI.Services.CatalogServices.CategoryServices
             _httpClient = httpClient;
         }
 
+        public async Task ChangeCategoryStatus(string id)
+        {
+            var responseMessage = await _httpClient.GetAsync("categories/ChangeStatus/" + id);
+        }
+
         public async Task CreateCategoryAsync(CreateCategoryDto createCategoryDto)
         {
+            createCategoryDto.Status = true;
             await _httpClient.PostAsJsonAsync<CreateCategoryDto>("categories", createCategoryDto);
         }
 
@@ -40,6 +46,7 @@ namespace MultiShop.WebUI.Services.CatalogServices.CategoryServices
 
         public async Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto)
         {
+            updateCategoryDto.Status = true;
             await _httpClient.PutAsJsonAsync<UpdateCategoryDto>("categories", updateCategoryDto);
         }
     }
