@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using MultiShop.Basket.WebAPI.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using MultiShop.Basket.WebAPI.LoginServices;
+using MultiShop.Basket.WebAPI.Services;
+using MultiShop.Basket.WebAPI.Settings;
 using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +21,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 // Service registration
-builder.Services.AddBasketServices(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IBasketService, BasketService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+
+builder.Services.Configure<RedisSettings>(builder.Configuration.GetSection("RedisSettings"));
+builder.Services.AddSingleton<RedisService>(sp =>
+{
+    var redisSettings = sp.GetRequiredService<IOptions<RedisSettings>>().Value;
+    var redis = new RedisService(redisSettings.Host, redisSettings.Port);
+    redis.Connect();
+    return redis;
+});
 
 builder.Services.AddControllers(opt =>
 {

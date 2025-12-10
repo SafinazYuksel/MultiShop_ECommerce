@@ -1,5 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MultiShop.DtoLayer.BasketDtos;
+using MultiShop.WebUI.Services.Abstract;
+using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace MultiShop.WebUI.Services.BasketServices
@@ -7,10 +9,12 @@ namespace MultiShop.WebUI.Services.BasketServices
     public class BasketService : IBasketService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILoginService _loginService;
 
-        public BasketService(HttpClient httpClient)
+        public BasketService(HttpClient httpClient, ILoginService loginService)
         {
             _httpClient = httpClient;
+            _loginService = loginService;
         }
 
         public async Task<BasketTotalDto> GetBasket()
@@ -21,16 +25,26 @@ namespace MultiShop.WebUI.Services.BasketServices
                 return null;
             }
 
-            var values = await responseMessage.Content.ReadFromJsonAsync<BasketTotalDto>();
+            var jsonData = await responseMessage.Content.ReadAsStringAsync();
+            if (string.IsNullOrEmpty(jsonData))
+            {
+                return null;
+            }
+            
+            var values = JsonConvert.DeserializeObject<BasketTotalDto>(jsonData);
             return values;
         }
 
         public async Task AddBasketItem(BasketItemDto basketItemDto)
         {
             var values = await GetBasket();
+
             if (values == null)
             {
                 values = new BasketTotalDto();
+                values.UserId = _loginService.GetUserId;
+                values.DiscountCode = "";
+                values.DiscountRate = 0;
                 values.BasketItems = new List<BasketItemDto>();
             }
 
@@ -68,7 +82,7 @@ namespace MultiShop.WebUI.Services.BasketServices
 
         public async Task DeleteBasket(string userId)
         {
-            await _httpClient.DeleteAsync($"baskets/{userId}");
+            await _httpClient.DeleteAsync($"baskets/DeleteBasket/{userId}");
         }
     }
 }

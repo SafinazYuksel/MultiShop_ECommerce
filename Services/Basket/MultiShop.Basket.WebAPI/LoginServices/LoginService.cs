@@ -1,4 +1,6 @@
-﻿namespace MultiShop.Basket.WebAPI.LoginServices
+﻿using System.Security.Claims;
+
+namespace MultiShop.Basket.WebAPI.LoginServices
 {
     public class LoginService : ILoginService
     {
@@ -9,12 +11,6 @@
             _httpContextAccessor = contextAccessor;
         }
 
-        public string GetUserId
-        {
-            get
-            {
-                return _httpContextAccessor.HttpContext.User.FindFirst("sub")?.Value;
-            }
-        }
+        public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
     }
 }

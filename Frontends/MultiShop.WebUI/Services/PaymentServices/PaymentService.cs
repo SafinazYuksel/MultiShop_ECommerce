@@ -11,10 +11,9 @@ namespace MultiShop.WebUI.Services.PaymentServices
             _httpClient = httpClient;
         }
 
-        public async Task<bool> CreatePaymentAsync(CreatePaymentDto createPaymentDto)
+        public async Task CreatePaymentAsync(CreatePaymentDto createPaymentDto)
         {
-            var response = await _httpClient.PostAsJsonAsync("payment", createPaymentDto);
-            return response.IsSuccessStatusCode;
+            await _httpClient.PostAsJsonAsync("https://localhost:7076/api/Payments/", createPaymentDto);
         }
     }
 }

@@ -25,23 +25,18 @@ namespace MultiShop.Basket.WebAPI.Controllers
         public async Task<IActionResult> GetBasketDetail()
         {
             var userId = _loginService.GetUserId;
-
-            // Eğer Token'dan ID okunamadıysa işlem yapma (veya Anonim id ata)
             if (string.IsNullOrEmpty(userId))
             {
-                // Geçici çözüm veya hata mesajı
                 return BadRequest("Kullanıcı kimliği doğrulanamadı.");
             }
 
-            var values1 = await _basketService.GetBasket(userId);
-
-            // ... (kodunuzun devamı aynı kalabilir) ...
-            if (values1 == null)
+            var basket = await _basketService.GetBasket(userId);
+            if (basket == null)
             {
                 var values = await _basketService.GetBasket(_loginService.GetUserId);
                 return Ok(values);
             }
-            return Ok();
+            return Ok(basket);
         }
 
         [HttpPost]
@@ -52,7 +47,7 @@ namespace MultiShop.Basket.WebAPI.Controllers
             return Ok("Sepetteki değişiklikler kaydedildi.");
         }
 
-        [HttpDelete]
+        [HttpDelete("DeleteBasket/{userId}")]
         public async Task<IActionResult> DeleteBasket(string userId)
         {
             await _basketService.DeleteBasket(userId);

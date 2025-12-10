@@ -4,10 +4,10 @@ namespace MultiShop.Basket.WebAPI.Settings
 {
     public class RedisService
     {
-        private readonly string _host;
-        private readonly int _port;
-        private ConnectionMultiplexer _connectionMultiplexer;
+        public string _host { get; set; }
+        public int _port { get; set; }
 
+        private ConnectionMultiplexer _connectionMultiplexer;
         public RedisService(string host, int port)
         {
             _host = host;
