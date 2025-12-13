@@ -21,14 +21,5 @@ namespace MultiShop.WebUI.Controllers
             ViewBag.directory3 = "Mesaj Gönder";
             return View();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Index(CreateContactDto createContactDto)
-        {
-            createContactDto.SendDate = DateTime.Now;
-            createContactDto.IsRead = false;
-            await _contactService.CreateContactAsync(createContactDto);
-            return RedirectToAction("Index", "Default");
-        }
     }
 }

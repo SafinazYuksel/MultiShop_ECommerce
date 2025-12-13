@@ -1,4 +1,5 @@
 ﻿using MultiShop.Catalog.Dtos.ProductDtos;
+using MultiShop.Catalog.Dtos.SubCategoryDtos;
 
 namespace MultiShop.Catalog.Services.ProductServices
 {
@@ -12,6 +13,7 @@ namespace MultiShop.Catalog.Services.ProductServices
         Task UpdateProductAsync(UpdateProductDto updateProductDto);
         Task DeleteProductAsync(string id);
         Task<List<ResultProductsWithCategoryDto>> GetProductsWithCategoryAsync();
-        Task<List<ResultProductsWithCategoryDto>> GetProductsWithByCategoryIdAsync(string categoryId);
+        Task<List<ResultProductDto>> GetProductsWithByCategoryIdAsync(string categoryId);
+        Task<List<ResultProductDto>> GetProductsBySubCategoryAsync(string subCategoryId);
     }
 }

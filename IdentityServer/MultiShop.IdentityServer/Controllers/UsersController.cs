@@ -55,7 +55,7 @@ namespace MultiShop.IdentityServer.Controllers
         }
 
         [HttpPut("UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserDto updateUserDto)
+        public async Task<IActionResult> UpdateUser(UpdateUserDto updateUserDto)
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
             if (userId == null) return BadRequest("Kullanıcı bulunamadı");

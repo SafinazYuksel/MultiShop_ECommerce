@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "ProductListWithSubCategory";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+    var catId = ViewBag.Id;
+    var subCatId = ViewBag.SubCategoryId;
+}
+
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-lg-3 col-md-4">
+
+            @await Component.InvokeAsync("ProductListSubCategoryFilter", new { categoryId = catId })
+
+            @await Component.InvokeAsync("ProductListPriceFilter")
+
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row pb-3">
+
+                @await Component.InvokeAsync("ProductListGetProductCount")
+
+                @await Component.InvokeAsync("ProductListProducts", new { id = catId, subCategoryId = subCatId })
+
+                @await Component.InvokeAsync("ProductListPagination")
+
+            </div>
+        </div>
+    </div>
+</div>

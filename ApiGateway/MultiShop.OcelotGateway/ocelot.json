@@ -100,26 +100,6 @@
 
     },
 
-    //Message Mikroservis
-    {
-      "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7078
-        }
-      ],
-      "UpstreamPathTemplate": "/services/message/{everything}",
-      "UpstreamhttpsMethod": [ "Get", "Post", "Put", "Delete" ],
-      "UpstreamScheme": "https",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "OcelotAuthenticationScheme",
-        "AllowedScopes": [ "MessageFullPermission" ]
-      }
-
-    },
-
     //Comment Mikroservis
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -160,7 +140,7 @@
 
     },
 
-    //Images Mikroservis
+    //Mail Mikroservis
     {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
@@ -170,13 +150,33 @@
           "Port": 7077
         }
       ],
-      "UpstreamPathTemplate": "/services/images/{everything}",
+      "UpstreamPathTemplate": "/services/mail/{everything}",
       "UpstreamhttpsMethod": [ "Get", "Post", "Put", "Delete" ],
       "UpstreamScheme": "https",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "OcelotAuthenticationScheme",
-        "AllowedScopes": [ "ImageFullPermission" ]
+        "AllowedScopes": [ "MailFullPermission" ]
       }
+    },
+
+    //Message Mikroservis
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7078
+        }
+      ],
+      "UpstreamPathTemplate": "/services/message/{everything}",
+      "UpstreamhttpsMethod": [ "Get", "Post", "Put", "Delete" ],
+      "UpstreamScheme": "https",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OcelotAuthenticationScheme",
+        "AllowedScopes": [ "MessageFullPermission" ]
+      }
+
     }
   ],
   "GlobalConfiguration": {

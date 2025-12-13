@@ -14,43 +14,43 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Adınız</label>
-                            <input class="form-control" type="text" asp-for="FirstName" placeholder="adınız">
+                            <input class="form-control" type="text" asp-for="FirstName">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Soyadınız</label>
-                            <input class="form-control" type="text" asp-for="LastName" placeholder="soyadınız">
+                            <input class="form-control" type="text" asp-for="LastName">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>E-mail Adresiniz</label>
-                            <input class="form-control" type="text" asp-for="Email" placeholder="mail@email.com">
+                            <input class="form-control" type="text" asp-for="Email">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Telefon Numaranız</label>
-                            <input class="form-control" type="text" asp-for="PhoneNumber" placeholder="+90 123 456 78 90">
+                            <input class="form-control" type="text" asp-for="PhoneNumber">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Ülke</label>
-                            <input class="form-control" type="text" asp-for="Country" placeholder="Türkiye">
+                            <input class="form-control" type="text" asp-for="Country">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Şehir</label>
-                            <input class="form-control" type="text" asp-for="City" placeholder="şehriniz">
+                            <input class="form-control" type="text" asp-for="City">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>İlçe</label>
-                            <input class="form-control" type="text" asp-for="District" placeholder="New York">
+                            <input class="form-control" type="text" asp-for="District">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Posta Kodu</label>
-                            <input class="form-control" type="text" asp-for="ZipCode" placeholder="12345">
+                            <input class="form-control" type="text" asp-for="ZipCode">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Address Satır 1</label>
-                            <input class="form-control" type="text" asp-for="AddressLine1" placeholder="123 mahallesi">
+                            <input class="form-control" type="text" asp-for="AddressLine1">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Address Satır 2</label>
-                            <input class="form-control" type="text" asp-for="AddressLine2" placeholder="123 sokak">
+                            <input class="form-control" type="text" asp-for="AddressLine2">
                         </div>
                     </div>
                     <button class="btn btn-primary">Adres Kaydet</button>
@@ -63,7 +63,6 @@
 
             @await Component.InvokeAsync("OrderProductSummary")
 
-            @await Component.InvokeAsync("OrderPaymentOptions")
         </div>
     </div>
 </div>

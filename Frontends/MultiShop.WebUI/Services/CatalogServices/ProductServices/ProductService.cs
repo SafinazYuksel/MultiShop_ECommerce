@@ -60,11 +60,11 @@ namespace MultiShop.WebUI.Services.CatalogServices.ProductServices
             return value;
         }
 
-        public async Task<List<ResultProductsWithCategoryDto>> GetProductsWithByCategoryIdAsync(string categoryId)
+        public async Task<List<ResultProductDto>> GetProductsWithByCategoryIdAsync(string categoryId)
         {
             var responseMessage = await _httpClient.GetAsync("products/GetProductsWithByCategoryId?id=" + categoryId);
             var jsonData = await responseMessage.Content.ReadAsStringAsync();
-            var values = JsonConvert.DeserializeObject<List<ResultProductsWithCategoryDto>>(jsonData);
+            var values = JsonConvert.DeserializeObject<List<ResultProductDto>>(jsonData);
             return values;
         }
 
@@ -87,6 +87,18 @@ namespace MultiShop.WebUI.Services.CatalogServices.ProductServices
         public async Task UpdateProductAsync(UpdateProductDto updateProductDto)
         {
             await _httpClient.PutAsJsonAsync<UpdateProductDto>("products", updateProductDto);
+        }
+
+        public async Task<List<ResultProductDto>> GetProductsBySubCategoryAsync(string subCategoryId)
+        {
+            var responseMessage = await _httpClient.GetAsync("products/GetProductsBySubCategoryAsync?id=" + subCategoryId);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var jsonData = await responseMessage.Content.ReadFromJsonAsync<List<ResultProductDto>>();
+                return jsonData;
+            }
+            return new List<ResultProductDto>();
         }
     }
 }

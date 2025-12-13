@@ -1,7 +1,8 @@
 ﻿@model List<ResultCategoryDto>
 
 @{
-    var currentUrlId = ViewContext.RouteData.Values["id"]?.ToString();
+    var currentCategoryId = ViewContext.RouteData.Values["id"]?.ToString();
+    var currentSubCategoryId = Context.Request.Query["subCategoryId"].ToString();
 }
 
 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Kategoriler</span></h5>
@@ -10,7 +11,7 @@
         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
             <input type="checkbox"
                    class="custom-control-input"
-                   @(string.IsNullOrEmpty(currentUrlId) ? "checked" : "")
+                   @(string.IsNullOrEmpty(currentCategoryId) ? "checked" : "")
                    id="size-all"
                    onclick="window.location.href='/ProductList/ProductGetAll/'">
             <label class="custom-control-label" for="size-all">Tüm Kategoriler</label>
@@ -19,7 +20,7 @@
 
         @foreach (var item in Model)
         {
-            var isChecked = currentUrlId == item.CategoryId.ToString() ? "checked" : "";
+            var isChecked = currentCategoryId == item.CategoryId.ToString() ? "checked" : "";
 
             <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
 
@@ -27,10 +28,10 @@
                        class="custom-control-input"
                        id="cat-@item.CategoryId"
                        @isChecked
-                       onclick="window.location.href='/ProductList/Index/@item.CategoryId'">
+                       onclick="window.location.href='/ProductList/ProductListWithSubCategory/@item.CategoryId'">
 
                 <label class="custom-control-label" for="cat-@item.CategoryId">
-                    <a href="/ProductList/Index/@item.CategoryId" class="text-dark text-decoration-none">
+                    <a href="/ProductList/ProductListWithSubCategory/@item.CategoryId" class="text-dark text-decoration-none">
                         @item.CategoryName
                     </a>
                 </label>

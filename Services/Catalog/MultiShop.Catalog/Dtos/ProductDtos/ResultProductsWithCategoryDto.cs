@@ -10,6 +10,7 @@ namespace MultiShop.Catalog.Dtos.ProductDtos
         public string ProductImageUrl { get; set; }
         public string ProductDescription { get; set; }
         public string CategoryId { get; set; }
+        public string SubCategoryId { get; set; }
         public ResultCategoryDto Category { get; set; }
     }
 }

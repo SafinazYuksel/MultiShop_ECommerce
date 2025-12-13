@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MongoDB.Driver;
 using MultiShop.Catalog.Dtos.ProductDtos;
+using MultiShop.Catalog.Dtos.SubCategoryDtos;
 using MultiShop.Catalog.Entities;
 using MultiShop.Catalog.Settings;
+using System.Net.Http;
 
 namespace MultiShop.Catalog.Services.ProductServices
 {
@@ -70,7 +72,13 @@ namespace MultiShop.Catalog.Services.ProductServices
 
         }
 
-        public async Task<List<ResultProductsWithCategoryDto>> GetProductsWithByCategoryIdAsync(string categoryId)
+        public async Task<List<ResultProductDto>> GetProductsBySubCategoryAsync(string subCategoryId)
+        {
+            var values = await _productCollection.Find(x => x.SubCategoryId == subCategoryId).ToListAsync();
+            return _mapper.Map<List<ResultProductDto>>(values);
+        }
+
+        public async Task<List<ResultProductDto>> GetProductsWithByCategoryIdAsync(string categoryId)
         {
             var values = await _productCollection.Find(x => x.CategoryId == categoryId).ToListAsync();
 
@@ -79,7 +87,7 @@ namespace MultiShop.Catalog.Services.ProductServices
                 item.Category = await _categoryCollection.Find<Category>(x => x.CategoryId == item.CategoryId).FirstAsync();
             }
 
-            return _mapper.Map<List<ResultProductsWithCategoryDto>>(values);
+            return _mapper.Map<List<ResultProductDto>>(values);
         }
 
         public async Task<List<ResultProductsWithCategoryDto>> GetProductsWithCategoryAsync()
@@ -91,6 +99,8 @@ namespace MultiShop.Catalog.Services.ProductServices
             }
             return _mapper.Map<List<ResultProductsWithCategoryDto>>(values);
         }
+
+
 
         public async Task<List<ResultProductDto>> GetTop8ProductAsync()
         {

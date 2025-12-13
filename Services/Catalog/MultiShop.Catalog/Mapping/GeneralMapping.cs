@@ -10,6 +10,7 @@ using MultiShop.Catalog.Dtos.ProductDetailDtos;
 using MultiShop.Catalog.Dtos.ProductDtos;
 using MultiShop.Catalog.Dtos.ProductImageDtos;
 using MultiShop.Catalog.Dtos.SpecialOfferDtos;
+using MultiShop.Catalog.Dtos.SubCategoryDtos;
 using MultiShop.Catalog.Entities;
 
 namespace MultiShop.Catalog.Mapping
@@ -22,6 +23,11 @@ namespace MultiShop.Catalog.Mapping
             CreateMap<Category, CreateCategoryDto>().ReverseMap();
             CreateMap<Category, UpdateCategoryDto>().ReverseMap();
             CreateMap<Category, GetByIdCategoryDto>().ReverseMap();
+
+            CreateMap<SubCategory, ResultSubCategoryDto>().ReverseMap();
+            CreateMap<SubCategory, CreateSubCategoryDto>().ReverseMap();
+            CreateMap<SubCategory, UpdateSubCategoryDto>().ReverseMap();
+            CreateMap<SubCategory, GetByIdSubCategoryDto>().ReverseMap();
 
             CreateMap<Product, ResultProductDto>().ReverseMap();
             CreateMap<Product, CreateProductDto>().ReverseMap();

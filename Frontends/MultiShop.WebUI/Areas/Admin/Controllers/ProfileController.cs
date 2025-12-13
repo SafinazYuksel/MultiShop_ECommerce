@@ -27,7 +27,7 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] UpdateUserDto updateUserDto)
+        public async Task<IActionResult> Index(UpdateUserDto updateUserDto)
         {
             await _userIdentityService.UpdateUserDetailAsync(updateUserDto);
             return RedirectToAction("Index");

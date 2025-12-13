@@ -1,0 +1,150 @@
+﻿@model List<ResultInboxMailDto>
+
+@{
+    ViewData["Title"] = "Inbox";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    int count = 0;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark"><i class="fas fa-paper-plane me-2"></i>Giden Kutusu</h3>
+        <a href="/Admin/Mail/SendMail" class="btn btn-primary fw-bold text-dark">
+            <i class="fas fa-plus me-2"></i>Yeni Mail Gönder
+        </a>
+        <a href="/Admin/Mail/SentBox" class="btn btn-success fw-bold text-dark">
+            <i class="fas fa-plus me-2"></i>Giden Kutusu
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="bg-light text-dark">
+                        <tr>
+                            <th scope="col" class="py-3 ps-4">#</th>
+                            <th scope="col" class="py-3">Alıcı İsim</th>
+                            <th scope="col" class="py-3">Alıcı Mail</th>
+                            <th scope="col" class="py-3">Konu</th>
+                            <th scope="col" class="py-3">Tarih</th>
+                            <th scope="col" class="py-3 text-center">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <td class="ps-4 fw-bold">@count</td>
+                                    <td>@item.SenderName</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
+                                                <i class="fas fa-user text-secondary"></i>
+                                            </div>
+                                            <span>@item.SenderMail</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="fw-semibold">@item.Subject</span></td>
+                                    <td>
+                                        <i class="far fa-calendar-alt me-1 text-muted"></i>
+                                        @item.Date.ToString("dd.MM.yyyy HH:mm")
+                                    </td>
+                                    <td class="text-center">
+                                        <button onclick="openMailDetail('@item.MessageId')" class="btn btn-sm btn-outline-primary" title="Detay">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <p>Henüz gelen bir mail bulunmuyor.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mailDetailModal" tabindex="-1" aria-labelledby="mailDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title text-dark fw-bold" id="modalSubject">Yükleniyor...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="mb-3 border-bottom pb-2">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <strong>Kimden:</strong> <span id="modalSender">...</span>
+                        </div>
+                        <div>
+                            <small class="text-muted" id="modalDate">...</small>
+                        </div>
+                    </div>
+                    <div class="text-muted small mt-1" id="modalEmail">...</div>
+                </div>
+
+                <div id="modalBody" class="p-2" style="min-height: 200px;">
+                    Yükleniyor...
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</a>
+                <a href="#" class="btn btn-primary"><i class="fas fa-reply"></i> Yanıtla</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function openMailDetail(messageId) {
+        // 1. Modalı Aç ve "Yükleniyor" moduna al
+        $('#modalSubject').text("Yükleniyor...");
+        $('#modalBody').html('<div class="text-center py-5"><div class="spinner-border text-warning" role="status"></div><p>Mail içeriği getiriliyor...</p></div>');
+        $('#mailDetailModal').modal('show');
+
+        // 2. AJAX ile Sunucuya İstek At
+        $.ajax({
+            url: '/Mail/GetMailDetail', // WebUI Controller Adresi
+            type: 'POST', // ID'yi güvenli göndermek için POST tercih edelim
+            data: { id: messageId },
+            success: function (data) {
+                if (data) {
+                    // 3. Gelen veriyi Modal alanlarına doldur
+                    $('#modalSubject').text(data.subject);
+                    $('#modalSender').text(data.senderName);
+                    $('#modalEmail').text(data.senderMail);
+
+                    // Tarih formatlama (İsteğe bağlı)
+                    var date = new Date(data.date);
+                    $('#modalDate').text(date.toLocaleString('tr-TR'));
+
+                    // HTML İçeriği bas (Güvenlik notu: XSS riskine karşı normalde sanitize edilmeli ama admin panel olduğu için html() kullanıyoruz)
+                    $('#modalBody').html(data.body);
+                } else {
+                    $('#modalBody').html('<div class="alert alert-danger">Mail içeriği alınamadı!</div>');
+                }
+            },
+            error: function () {
+                $('#modalBody').html('<div class="alert alert-danger">Bir hata oluştu!</div>');
+            }
+        });
+    }
+</script>

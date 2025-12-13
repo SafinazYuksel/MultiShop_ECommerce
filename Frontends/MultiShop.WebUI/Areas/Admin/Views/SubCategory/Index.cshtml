@@ -1,0 +1,65 @@
+﻿@model List<ResultSubCategoryDto>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    int count = 0;
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <div class="bs-example" data-example-id="hoverable-table">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Alt Kategori Adı</th>
+                                <th>Ana Kategori</th>
+                                <th>Durumu</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <th scope="row">@count</th>
+                                    <td>@item.SubCategoryName</td>
+                                    <td></td>
+                                    <td class="text-truncate tablesort-3">
+                                        @if (item.SubCategoryStatus)
+                                        {
+                                            <span class="lable-tag tag-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="lable-tag tag-unpaid">Pasif</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.SubCategoryStatus)
+                                        {
+                                            <a href="/Admin/SubCategory/ChangeStatus/@item.SubCategoryId" class="btn btn-sm btn-warning btn-rounded">Pasif Yap</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/Admin/SubCategory/ChangeStatus/@item.SubCategoryId" class="btn btn-sm btn-success btn-rounded">Aktif Yap</a>
+                                        }
+
+                                        <a href="/Admin/SubCategory/UpdateSubCategory/@item.SubCategoryId" class="btn btn-sm btn-info btn-rounded">Güncelle</a>
+                                        <a href="/Admin/SubCategory/DeleteSubCategory/@item.SubCategoryId" class="btn btn-sm btn-danger btn-rounded">Sil</a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <a href="/Admin/SubCategory/CreateSubCategory/" class="btn btn-primary btn-rounded">Alt Kategoriyi Ekle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

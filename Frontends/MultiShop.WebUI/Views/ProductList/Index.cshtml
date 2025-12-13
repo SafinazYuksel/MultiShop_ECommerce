@@ -15,7 +15,7 @@
         </div>
         <div class="col-lg-9 col-md-8">
             <div class="row pb-3">
-                
+
                 @await Component.InvokeAsync("ProductListGetProductCount")
 
                 @await Component.InvokeAsync("ProductListProducts", new { id = ViewBag.Id })

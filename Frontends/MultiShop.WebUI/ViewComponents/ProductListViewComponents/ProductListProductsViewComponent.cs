@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MultiShop.Catalog.Entities;
 using MultiShop.DtoLayer.CatalogDtos.ProductDtos;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
 using Newtonsoft.Json;
@@ -16,10 +17,22 @@ namespace MultiShop.WebUI.ViewComponents.ProductListViewComponents
             _productService = productService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string id)
+        public async Task<IViewComponentResult> InvokeAsync(string id, string subCategoryId)
         {
-            var values = await _productService.GetProductsWithByCategoryIdAsync(id);
-            return View(values);
+            if (!string.IsNullOrEmpty(subCategoryId))
+            {
+                var values = await _productService.GetProductsBySubCategoryAsync(subCategoryId);
+                return View(values);
+            }
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                var values = await _productService.GetProductsWithByCategoryIdAsync(id);
+                return View(values);
+            }
+
+            var allValues = await _productService.GetAllProductAsync();
+            return View(allValues);
         }
     }
 }

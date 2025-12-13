@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MultiShop.Catalog.Entities;
+using MultiShop.DtoLayer.CatalogDtos.SubCategoryDtos;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
+using MultiShop.WebUI.Services.CatalogServices.SubCategoryServices;
 using System.Threading.Tasks;
 
 namespace MultiShop.WebUI.ViewComponents.ProductListViewComponents

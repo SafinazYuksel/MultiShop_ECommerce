@@ -1,0 +1,49 @@
+﻿@model List<ResultSubCategoryDto>
+
+@{
+    var currentCategoryId = ViewContext.RouteData.Values["id"]?.ToString();
+    var currentSubCategoryId = Context.Request.Query["subCategoryId"].ToString();
+}
+
+@if (Model != null && Model.Any())
+{
+    <div class="mb-4">
+        <h5 class="section-title position-relative text-uppercase mb-3">
+            <span class="bg-secondary pr-3">Alt Kategoriler</span>
+        </h5>
+        <div class="bg-light p-4 mb-30">
+            <form>
+
+                <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                    <input type="checkbox"
+                           class="custom-control-input"
+                           id="sub-all"
+                           @(string.IsNullOrEmpty(currentSubCategoryId) ? "checked" : "")
+                           onclick="window.location.href='/ProductList/ProductListWithSubCategory/@currentCategoryId'">
+                    <label class="custom-control-label" for="sub-all">Tümü</label>
+                </div>
+
+                @foreach (var item in Model)
+                {
+                    var isChecked = currentSubCategoryId == item.SubCategoryId.ToString() ? "checked" : "";
+                    var targetUrl = $"/ProductList/ProductListWithSubCategory/{currentCategoryId}?subCategoryId={item.SubCategoryId}";
+
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               id="sub-@item.SubCategoryId"
+                               @isChecked
+                               onclick="window.location.href='@targetUrl'">
+
+                        <label class="custom-control-label" for="sub-@item.SubCategoryId">
+                            <a href="@targetUrl" class="text-dark text-decoration-none">
+                                @item.SubCategoryName
+                            </a>
+                        </label>
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+}

@@ -1,0 +1,30 @@
+﻿@model UpdateSubCategoryDto
+
+@{
+    ViewData["Title"] = "UpdateSubCategory";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="chart-box">
+        <h4>Alt Kategori Güncelleme Sayfası</h4>
+        <div class="row">
+            <form method="post" enctype="multipart/form-data">
+                <div class="col-md-12">
+                    <fieldset class="form-group">
+                        <input type="hidden" asp-for="SubCategoryId" />
+                        <label>Alt Kategori Adı</label>
+                        <input type="text" class="form-control" asp-for="SubCategoryName" />
+                    </fieldset>
+                </div>
+                <div class="col-md-12">
+                    <fieldset class="form-group">
+                        <label>Kategori Seçin</label>
+                        @Html.DropDownListFor(x => x.CategoryId, (List<SelectListItem>)ViewBag.categories, new { @class = "form-control" })
+                    </fieldset>
+                </div>
+                <button class="btn btn-primary btn-rounded">Alt Kategoriyi Güncelle</button>
+            </form>
+        </div>
+    </div>
+</div>

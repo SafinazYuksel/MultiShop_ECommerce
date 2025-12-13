@@ -30,17 +30,9 @@ namespace MultiShop.WebUI.Services.CatalogServices.ContactServices
             return values;
         }
 
-        public async Task<UpdateContactDto> GetByIdContactAsync(string id)
+        public Task<GetByIdContactDto> GetByIdContactAsync(string id)
         {
-            var responseMessage = await _httpClient.GetAsync("contacts/" + id);
-            var jsonData = await responseMessage.Content.ReadAsStringAsync();
-            var value = JsonConvert.DeserializeObject<UpdateContactDto>(jsonData);
-            return value;
-        }
-
-        public async Task UpdateContactAsync(UpdateContactDto updateContactDto)
-        {
-            await _httpClient.PutAsJsonAsync<UpdateContactDto>("contacts", updateContactDto);
+            throw new NotImplementedException();
         }
     }
 }

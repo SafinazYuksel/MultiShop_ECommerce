@@ -4,6 +4,7 @@ using MultiShop.DtoLayer.CatalogDtos.ProductDtos;
 using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
+using MultiShop.WebUI.Services.CatalogServices.SubCategoryServices;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers
 {
@@ -13,13 +14,15 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly ISubCategoryService _subCategoryService;
         private readonly IFileService _fileService;
 
-        public ProductController(IProductService productService, ICategoryService categoryService, IFileService fileService)
+        public ProductController(IProductService productService, ICategoryService categoryService, IFileService fileService, ISubCategoryService subCategoryService)
         {
             _productService = productService;
             _categoryService = categoryService;
             _fileService = fileService;
+            _subCategoryService = subCategoryService;
         }
 
         [Route("Index")]
@@ -51,7 +54,10 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
                                                        Value = x.CategoryId
                                                    }).ToList();
 
+            var subCategoryValues = await _subCategoryService.GetAllSubCategoryAsync();
+
             ViewBag.categories = categoryValues;
+            ViewBag.subCategories = subCategoryValues;
             return View();
         }
 
@@ -89,7 +95,10 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
                                                        Value = x.CategoryId
                                                    }).ToList();
 
+            var subCategoryValues = await _subCategoryService.GetAllSubCategoryAsync();
+
             ViewBag.categories = categoryValues;
+            ViewBag.subCategories = subCategoryValues;
 
             var value = await _productService.GetByIdProductAsync(id);
             return View(value);

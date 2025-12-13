@@ -12,6 +12,7 @@ using MultiShop.Catalog.Services.ProductImageServices;
 using MultiShop.Catalog.Services.ProductServices;
 using MultiShop.Catalog.Services.SpecialOfferServices;
 using MultiShop.Catalog.Services.StatisticServices;
+using MultiShop.Catalog.Services.SubCategoryServices;
 using MultiShop.Catalog.Settings;
 
 namespace MultiShop.Catalog.Extensions
@@ -29,6 +30,7 @@ namespace MultiShop.Catalog.Extensions
 
             // Add services to the container.
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISubCategoryService, SubCategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductDetailService, ProductDetailService>();
             services.AddScoped<IProductImageService, ProductImageService>();

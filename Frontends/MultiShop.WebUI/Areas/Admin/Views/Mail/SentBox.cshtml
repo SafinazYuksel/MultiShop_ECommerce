@@ -1,0 +1,79 @@
+﻿@using MultiShop.DtoLayer.MailDtos
+@model List<ResultInboxMailDto>
+
+@{
+    ViewData["Title"] = "SentBox";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    int count = 0;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark"><i class="fas fa-paper-plane me-2"></i>Giden Kutusu</h3>
+        <a href="/Admin/Mail/SendMail" class="btn btn-primary fw-bold text-dark">
+            <i class="fas fa-plus me-2"></i>Yeni Mail Gönder
+        </a>
+        <a href="/Admin/Mail/Inbox" class="btn btn-success fw-bold text-dark">
+            <i class="fas fa-plus me-2"></i>Gelen Kutusu
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="bg-light text-dark">
+                        <tr>
+                            <th scope="col" class="py-3 ps-4">#</th>
+                            <th scope="col" class="py-3">Alıcı İsim</th>
+                            <th scope="col" class="py-3">Alıcı Mail</th>
+                            <th scope="col" class="py-3">Konu</th>
+                            <th scope="col" class="py-3">Tarih</th>
+                            <th scope="col" class="py-3 text-center">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <td class="ps-4 fw-bold">@count</td>
+                                    <td>@item.SenderName</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
+                                                <i class="fas fa-user text-secondary"></i>
+                                            </div>
+                                            <span>@item.SenderMail</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="fw-semibold">@item.Subject</span></td>
+                                    <td>
+                                        <i class="far fa-calendar-alt me-1 text-muted"></i>
+                                        @item.Date.ToString("dd.MM.yyyy HH:mm")
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-primary" title="Detay">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <p>Henüz gönderilmiş bir mail bulunmuyor.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

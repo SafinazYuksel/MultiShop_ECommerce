@@ -1,0 +1,9 @@
+﻿namespace MultiShop.Catalog.Dtos.SubCategoryDtos
+{
+    public class CreateSubCategoryDto
+    {
+        public string SubCategoryName { get; set; }
+        public bool SubCategoryStatus { get; set; }
+        public string CategoryId { get; set; }
+    }
+}

@@ -1,8 +1,46 @@
-﻿
+﻿@model List<ResultContactDto>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    int count = 0;
 }
 
-<h1>Index</h1>
-
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <div class="bs-example" data-example-id="hoverable-table">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kullanıcı</th>
+                                <th>Mail</th>
+                                <th>Konu</th>
+                                <th>Tarih</th>
+                                <th>Sil</th>
+                                <th>Görüntüle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <th scope="row">@count</th>
+                                    <td>@item.NameSurname</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Subject</td>
+                                    <td>@item.SendDate.ToShortDateString()</td>
+                                    <td><a href="/Admin/Contact/DeleteContact/@item.ContactId" class="btn btn-danger">Sil</a></td>
+                                    <td><a href="/Admin/Contact/ContactDetail/@item.ContactId" class="btn btn-success">Görüntüle</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
